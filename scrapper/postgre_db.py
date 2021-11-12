@@ -8,7 +8,7 @@ from scrapper.utils import format_data
 
 class PostgreSQL():
     """PostgreSQL DB functionalities"""
-    def __init__(self) -> None:
+    def __init__(self):
         """Initialize PostgreSQL database server connection"""
         self.config = self.init_config()
         self.connection = psycopg2.connect(**self.config)
@@ -95,7 +95,7 @@ class PostgreSQL():
             print(error)
 
 
-    def fetch_records(self, params):
+    def fetch_records(self, params: dict):
         """ query data from the catalog_data table with given params dict."""
         try:
             add_sql = ''

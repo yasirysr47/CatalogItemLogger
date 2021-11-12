@@ -1,8 +1,8 @@
 def format_data(data):
     result = []
-    if type(data[0]) != tuple:
+    if not data or type(data[0]) != tuple:
         return {"message": "No data found"}
-    
+
     for record in data:
         data_dict = {
             "manufacturer": record[0],

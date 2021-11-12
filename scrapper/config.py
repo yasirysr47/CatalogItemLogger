@@ -5,7 +5,7 @@ url_head = 'https://www.urparts.com/'
 catalog_url = 'https://www.urparts.com/index.cfm/page/catalogue'
 
 # DB
-db_config_file = "scrapper/database.ini"
+db_config_file = "db_configs/database.ini"
 
 # catalog data JSON file
 catalog_dump_data = "data/catalog_data.json"
