@@ -1,0 +1,7 @@
+psycopg2
+bs4
+requests
+lxml
+fastapi
+uvicorn[standard]
+orjson

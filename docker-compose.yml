@@ -1,0 +1,66 @@
+version: '3.2'
+
+services:
+  postgres:
+    container_name: postgres_container
+    image: postgres:14
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=myasir
+      - POSTGRES_PASSWORD=1234
+    volumes:
+       - postgres:/data/postgres
+       - /Users/myasir/Personal/CatalogItemLogger/db_configs/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+  
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+       - pgadmin:/var/lib/pgadmin
+
+    ports:
+      - "5050:80"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  webserver:
+    container_name: dnl_container
+    image: dnl-docker
+    restart: always
+    depends_on:
+      - postgres
+    volumes:
+      - "/Users/myasir/Personal/CatalogItemLogger:/home/dnl"
+    environment:
+      POSTGRES_DOCKER_DBTYPE: pgsql
+      POSTGRES_DOCKER_DBNAME: catalog
+      POSTGRES_DOCKER_DBUSER: myasir
+      POSTGRES_DOCKER_DBPASS: "1234"
+    ports:
+      - "8000:8000"
+    networks:
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.29.0.0/24
+
+volumes:
+    postgres:
+    pgadmin:
