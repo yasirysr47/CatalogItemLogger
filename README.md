@@ -1,5 +1,8 @@
 # CatalogItemLogger
 
+Build the image for the first time:
+`docker build -t dnl-docker .`
+
 Start the program by
 `docker-compose up -d`
 
