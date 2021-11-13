@@ -21,7 +21,7 @@ class PostgreSQL():
         # read config file
         parser.read(filename)
         # get section, default to postgresql
-        db = {}
+        db = dict()
         if parser.has_section(section):
             params = parser.items(section)
             for param in params:

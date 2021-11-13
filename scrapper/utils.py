@@ -1,4 +1,5 @@
 def format_data(data):
+    """format db response from a list of strings to a structered list of dicts"""
     result = []
     if not data or type(data[0]) != tuple:
         return {"message": "No data found"}
