@@ -12,7 +12,7 @@ class PostgreSQL():
         """Initialize PostgreSQL database server connection"""
         self.config = self.init_config()
         self.connection = psycopg2.connect(**self.config)
-        self.curser = self.connection.cursor()
+        self.cursor = self.connection.cursor()
 
     def init_config(self, filename=db_config_file, section='postgresql'):
         """configure the DB with details configuration file provided"""
@@ -53,7 +53,7 @@ class PostgreSQL():
             )
             """,)
         try:
-            # create table one by one
+            # create table one by one if multiple tables need to be created
             for command in commands:
                 self.cursor.execute(command)
             # close communication with the PostgreSQL database server
@@ -70,7 +70,7 @@ class PostgreSQL():
         sql = """INSERT INTO catalog_data(manufacturer, category, model, part, part_category) VALUES (%s,%s,%s,%s,%s);"""
         try:
             # execute the INSERT statement
-            self.curser.execute(sql, record)
+            self.cursor.execute(sql, record)
             # commit the changes to the database
             self.connection.commit()
         except (Exception, psycopg2.DatabaseError) as error:
@@ -84,10 +84,10 @@ class PostgreSQL():
         try:
             sql = "SELECT manufacturer, category, model, part, part_category FROM catalog_data ORDER BY manufacturer limit 100"
             # execute the query
-            self.curser.execute(sql)
-            print("The number of parts: ", self.curser.rowcount)
+            self.cursor.execute(sql)
+            print("The number of parts: ", self.cursor.rowcount)
             # get all records.
-            rows = self.curser.fetchall()
+            rows = self.cursor.fetchall()
             return format_data(rows)
 
         except (Exception, psycopg2.DatabaseError) as error:
@@ -113,9 +113,9 @@ class PostgreSQL():
 
             final_sql = f"SELECT manufacturer, category, model, part, part_category FROM catalog_data where {add_sql} ORDER BY manufacturer limit 100"
             # execute the querry.
-            self.curser.execute(final_sql)
+            self.cursor.execute(final_sql)
             # get all records.
-            rows = self.curser.fetchall()
+            rows = self.cursor.fetchall()
             return format_data(rows)
         except (Exception, psycopg2.DatabaseError) as error:
             self.connection.rollback()
